@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState } from "react";
 import { generateItems, renderLog } from "./utils";
 import {
   User,
@@ -11,6 +11,12 @@ import {
   ThemeContextType,
   useThemeContext,
 } from "./context/theme";
+import {
+  Notification,
+  NotificationContext,
+  NotificationContextType,
+  useNotificationContext,
+} from "./context/notification";
 
 // 타입 정의
 interface Item {
@@ -19,30 +25,6 @@ interface Item {
   category: string;
   price: number;
 }
-
-interface Notification {
-  id: number;
-  message: string;
-  type: "info" | "success" | "warning" | "error";
-}
-
-// AppContext 타입 정의
-interface AppContextType {
-  notifications: Notification[];
-  addNotification: (message: string, type: Notification["type"]) => void;
-  removeNotification: (id: number) => void;
-}
-
-const AppContext = createContext<AppContextType | undefined>(undefined);
-
-// 커스텀 훅: useAppContext
-const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
 
 // Header 컴포넌트
 export const Header: React.FC = () => {
@@ -152,7 +134,7 @@ export const ItemList: React.FC<{
 // ComplexForm 컴포넌트
 export const ComplexForm: React.FC = () => {
   renderLog("ComplexForm rendered");
-  const { addNotification } = useAppContext();
+  const { addNotification } = useNotificationContext();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -237,7 +219,7 @@ export const ComplexForm: React.FC = () => {
 // NotificationSystem 컴포넌트
 export const NotificationSystem: React.FC = () => {
   renderLog("NotificationSystem rendered");
-  const { notifications, removeNotification } = useAppContext();
+  const { notifications, removeNotification } = useNotificationContext();
 
   return (
     <div className="fixed bottom-4 right-4 space-y-2">
@@ -310,7 +292,7 @@ const App: React.FC = () => {
     );
   };
 
-  const contextValue: AppContextType = {
+  const contextValue: NotificationContextType = {
     notifications,
     addNotification,
     removeNotification,
@@ -330,7 +312,7 @@ const App: React.FC = () => {
   return (
     <ThemeContext.Provider value={themeContextValue}>
       <UserContext.Provider value={userContextValue}>
-        <AppContext.Provider value={contextValue}>
+        <NotificationContext.Provider value={contextValue}>
           <div
             className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
           >
@@ -347,7 +329,7 @@ const App: React.FC = () => {
             </div>
             <NotificationSystem />
           </div>
-        </AppContext.Provider>
+        </NotificationContext.Provider>
       </UserContext.Provider>
     </ThemeContext.Provider>
   );
