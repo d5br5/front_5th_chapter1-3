@@ -236,8 +236,8 @@ export const NotificationSystem: React.FC = () => {
   );
 };
 
-// 메인 App 컴포넌트
-const App: React.FC = () => {
+const Body = () => {
+  const { theme } = useThemeContext();
   const [items, setItems] = useState(generateItems(1000));
 
   const addItems = () => {
@@ -248,23 +248,30 @@ const App: React.FC = () => {
   };
 
   return (
-    <Providers>
-      <div
-      // className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
-      >
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 md:pr-4">
-              <ItemList items={items} onAddItemsClick={addItems} />
-            </div>
-            <div className="w-full md:w-1/2 md:pl-4">
-              <ComplexForm />
-            </div>
+    <div
+      className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
+    >
+      <Header />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row">
+          <div className="w-full md:w-1/2 md:pr-4">
+            <ItemList items={items} onAddItemsClick={addItems} />
+          </div>
+          <div className="w-full md:w-1/2 md:pl-4">
+            <ComplexForm />
           </div>
         </div>
-        <NotificationSystem />
       </div>
+      <NotificationSystem />
+    </div>
+  );
+};
+
+// 메인 App 컴포넌트
+const App: React.FC = () => {
+  return (
+    <Providers>
+      <Body />
     </Providers>
   );
 };
