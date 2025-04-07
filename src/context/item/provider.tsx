@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { generateItems } from "../../utils";
 import { ItemContext } from ".";
-import { useCallback } from "../../@lib";
+import { useCallback, useMemo } from "../../@lib";
 
 export const ItemProvider: React.FC<{
   children: React.ReactNode;
@@ -15,9 +15,9 @@ export const ItemProvider: React.FC<{
     ]);
   }, [setItems]);
 
+  const contextValue = useMemo(() => ({ items, addItems }), [items, addItems]);
+
   return (
-    <ItemContext.Provider value={{ items, addItems }}>
-      {children}
-    </ItemContext.Provider>
+    <ItemContext.Provider value={contextValue}>{children}</ItemContext.Provider>
   );
 };
