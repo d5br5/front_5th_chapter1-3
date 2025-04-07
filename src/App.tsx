@@ -6,6 +6,11 @@ import {
   UserContextType,
   useUserContext,
 } from "./context/user";
+import {
+  ThemeContext,
+  ThemeContextType,
+  useThemeContext,
+} from "./context/theme";
 
 // 타입 정의
 interface Item {
@@ -23,9 +28,6 @@ interface Notification {
 
 // AppContext 타입 정의
 interface AppContextType {
-  theme: string;
-  toggleTheme: () => void;
-
   notifications: Notification[];
   addNotification: (message: string, type: Notification["type"]) => void;
   removeNotification: (id: number) => void;
@@ -45,7 +47,7 @@ const useAppContext = () => {
 // Header 컴포넌트
 export const Header: React.FC = () => {
   renderLog("Header rendered");
-  const { theme, toggleTheme } = useAppContext();
+  const { theme, toggleTheme } = useThemeContext();
   const { user, login, logout } = useUserContext();
 
   const handleLogin = () => {
@@ -95,7 +97,7 @@ export const ItemList: React.FC<{
 }> = ({ items, onAddItemsClick }) => {
   renderLog("ItemList rendered");
   const [filter, setFilter] = useState("");
-  const { theme } = useAppContext();
+  const { theme } = useThemeContext();
 
   const filteredItems = items.filter(
     (item) =>
@@ -309,8 +311,6 @@ const App: React.FC = () => {
   };
 
   const contextValue: AppContextType = {
-    theme,
-    toggleTheme,
     notifications,
     addNotification,
     removeNotification,
@@ -322,27 +322,34 @@ const App: React.FC = () => {
     logout,
   };
 
+  const themeContextValue: ThemeContextType = {
+    theme,
+    toggleTheme,
+  };
+
   return (
-    <UserContext.Provider value={userContextValue}>
-      <AppContext.Provider value={contextValue}>
-        <div
-          className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
-        >
-          <Header />
-          <div className="container mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 md:pr-4">
-                <ItemList items={items} onAddItemsClick={addItems} />
-              </div>
-              <div className="w-full md:w-1/2 md:pl-4">
-                <ComplexForm />
+    <ThemeContext.Provider value={themeContextValue}>
+      <UserContext.Provider value={userContextValue}>
+        <AppContext.Provider value={contextValue}>
+          <div
+            className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
+          >
+            <Header />
+            <div className="container mx-auto px-4 py-8">
+              <div className="flex flex-col md:flex-row">
+                <div className="w-full md:w-1/2 md:pr-4">
+                  <ItemList items={items} onAddItemsClick={addItems} />
+                </div>
+                <div className="w-full md:w-1/2 md:pl-4">
+                  <ComplexForm />
+                </div>
               </div>
             </div>
+            <NotificationSystem />
           </div>
-          <NotificationSystem />
-        </div>
-      </AppContext.Provider>
-    </UserContext.Provider>
+        </AppContext.Provider>
+      </UserContext.Provider>
+    </ThemeContext.Provider>
   );
 };
 
