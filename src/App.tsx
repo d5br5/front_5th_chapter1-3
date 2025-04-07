@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import { generateItems, renderLog } from "./utils";
+import { renderLog } from "./utils";
 import { useUserContext } from "./context/user";
 import { useNotificationContext } from "./context/notification/hook";
 import { Providers } from "./context/providers";
 import { useThemeContext } from "./context/theme";
+import { useItemContext } from "./context/item";
 
 // 타입 정의
-interface Item {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-}
 
 // Header 컴포넌트
 export const Header: React.FC = () => {
@@ -60,13 +55,11 @@ export const Header: React.FC = () => {
 };
 
 // ItemList 컴포넌트
-export const ItemList: React.FC<{
-  items: Item[];
-  onAddItemsClick: () => void;
-}> = ({ items, onAddItemsClick }) => {
+export const ItemList: React.FC = () => {
   renderLog("ItemList rendered");
   const [filter, setFilter] = useState("");
   const { theme } = useThemeContext();
+  const { items, addItems } = useItemContext();
 
   const filteredItems = items.filter(
     (item) =>
@@ -86,7 +79,7 @@ export const ItemList: React.FC<{
           <button
             type="button"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
-            onClick={onAddItemsClick}
+            onClick={addItems}
           >
             대량추가
           </button>
@@ -238,14 +231,6 @@ export const NotificationSystem: React.FC = () => {
 
 const Body = () => {
   const { theme } = useThemeContext();
-  const [items, setItems] = useState(generateItems(1000));
-
-  const addItems = () => {
-    setItems((prevItems) => [
-      ...prevItems,
-      ...generateItems(1000, prevItems.length),
-    ]);
-  };
 
   return (
     <div
@@ -255,7 +240,7 @@ const Body = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 md:pr-4">
-            <ItemList items={items} onAddItemsClick={addItems} />
+            <ItemList />
           </div>
           <div className="w-full md:w-1/2 md:pl-4">
             <ComplexForm />
