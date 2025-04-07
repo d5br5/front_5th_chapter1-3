@@ -5,11 +5,12 @@ import { useNotificationContext } from "./context/notification/hook";
 import { Providers } from "./context/providers";
 import { useThemeContext } from "./context/theme";
 import { useItemContext } from "./context/item";
+import { memo } from "./@lib";
 
 // 타입 정의
 
 // Header 컴포넌트
-export const Header: React.FC = () => {
+export const Header: React.FC = memo(() => {
   renderLog("Header rendered");
   const { theme, toggleTheme } = useThemeContext();
   const { user, login, logout } = useUserContext();
@@ -52,10 +53,10 @@ export const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+});
 
 // ItemList 컴포넌트
-export const ItemList: React.FC = () => {
+export const ItemList: React.FC = memo(() => {
   renderLog("ItemList rendered");
   const [filter, setFilter] = useState("");
   const { theme } = useThemeContext();
@@ -109,10 +110,10 @@ export const ItemList: React.FC = () => {
       </ul>
     </div>
   );
-};
+});
 
 // ComplexForm 컴포넌트
-export const ComplexForm: React.FC = () => {
+export const ComplexForm: React.FC = memo(() => {
   renderLog("ComplexForm rendered");
   const { addNotification } = useNotificationContext();
   const [formData, setFormData] = useState({
@@ -194,10 +195,10 @@ export const ComplexForm: React.FC = () => {
       </form>
     </div>
   );
-};
+});
 
 // NotificationSystem 컴포넌트
-export const NotificationSystem: React.FC = () => {
+export const NotificationSystem: React.FC = memo(() => {
   renderLog("NotificationSystem rendered");
   const { notifications, removeNotification } = useNotificationContext();
 
@@ -227,7 +228,7 @@ export const NotificationSystem: React.FC = () => {
       ))}
     </div>
   );
-};
+});
 
 const Body = () => {
   const { theme } = useThemeContext();
