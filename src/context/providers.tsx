@@ -1,16 +1,16 @@
 import { ItemProvider } from "./item/provider";
 import { NotificationProvider } from "./notification/provider";
 import { ThemeProvider } from "./theme/provider";
-import { UserProvider } from "./user/providers";
+import { UserProvider } from "./user/provider";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <NotificationProvider>
-      <UserProvider>
-        <ThemeProvider>
+    <ThemeProvider>
+      <NotificationProvider>
+        <UserProvider>
           <ItemProvider>{children}</ItemProvider>
-        </ThemeProvider>
-      </UserProvider>
-    </NotificationProvider>
+        </UserProvider>
+      </NotificationProvider>
+    </ThemeProvider>
   );
 };

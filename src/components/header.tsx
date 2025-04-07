@@ -2,11 +2,13 @@ import { memo } from "react";
 import { renderLog } from "../utils";
 import { useUserContext } from "../context/user";
 import { useThemeContext } from "../context/theme";
+import { useNotificationContext } from "../context/notification/hook";
 
 export const Header: React.FC = memo(() => {
   renderLog("Header rendered");
   const { theme, toggleTheme } = useThemeContext();
   const { user, login, logout } = useUserContext();
+  const { addNotification } = useNotificationContext();
 
   const handleLogin = () => {
     // 실제 애플리케이션에서는 사용자 입력을 받아야 합니다.
@@ -28,7 +30,10 @@ export const Header: React.FC = memo(() => {
             <div className="flex items-center">
               <span className="mr-2">{user.name}님 환영합니다!</span>
               <button
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                  addNotification("로그아웃되었습니다", "info");
+                }}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
                 로그아웃
@@ -36,7 +41,10 @@ export const Header: React.FC = memo(() => {
             </div>
           ) : (
             <button
-              onClick={handleLogin}
+              onClick={() => {
+                handleLogin();
+                addNotification("성공적으로 로그인되었습니다", "success");
+              }}
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               로그인
