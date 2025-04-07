@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { renderLog } from "../utils";
 import { useUserContext } from "../context/user";
-import { ToggleThemeButton } from "./toggle-theme-button";
+import { useThemeContext } from "../context/theme";
 
 export const Header: React.FC = memo(() => {
   renderLog("Header rendered");
+  const { theme, toggleTheme } = useThemeContext();
   const { user, login, logout } = useUserContext();
 
   const handleLogin = () => {
@@ -17,7 +18,12 @@ export const Header: React.FC = memo(() => {
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold">샘플 애플리케이션</h1>
         <div className="flex items-center">
-          <ToggleThemeButton />
+          <button
+            onClick={toggleTheme}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            {theme === "light" ? "다크 모드" : "라이트 모드"}
+          </button>
           {user ? (
             <div className="flex items-center">
               <span className="mr-2">{user.name}님 환영합니다!</span>
