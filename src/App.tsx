@@ -11,12 +11,8 @@ import {
   ThemeContextType,
   useThemeContext,
 } from "./context/theme";
-import {
-  Notification,
-  NotificationContext,
-  NotificationContextType,
-  useNotificationContext,
-} from "./context/notification";
+import { NotificationProvider } from "./context/notification/provider";
+import { useNotificationContext } from "./context/notification/hook";
 
 // 타입 정의
 interface Item {
@@ -254,7 +250,6 @@ const App: React.FC = () => {
   const [theme, setTheme] = useState("light");
   const [items, setItems] = useState(generateItems(1000));
   const [user, setUser] = useState<User | null>(null);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -269,33 +264,12 @@ const App: React.FC = () => {
 
   const login = (email: string) => {
     setUser({ id: 1, name: "홍길동", email });
-    addNotification("성공적으로 로그인되었습니다", "success");
+    // addNotification("성공적으로 로그인되었습니다", "success");
   };
 
   const logout = () => {
     setUser(null);
-    addNotification("로그아웃되었습니다", "info");
-  };
-
-  const addNotification = (message: string, type: Notification["type"]) => {
-    const newNotification: Notification = {
-      id: Date.now(),
-      message,
-      type,
-    };
-    setNotifications((prev) => [...prev, newNotification]);
-  };
-
-  const removeNotification = (id: number) => {
-    setNotifications((prev) =>
-      prev.filter((notification) => notification.id !== id),
-    );
-  };
-
-  const contextValue: NotificationContextType = {
-    notifications,
-    addNotification,
-    removeNotification,
+    // addNotification("로그아웃되었습니다", "info");
   };
 
   const userContextValue: UserContextType = {
@@ -310,9 +284,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <ThemeContext.Provider value={themeContextValue}>
-      <UserContext.Provider value={userContextValue}>
-        <NotificationContext.Provider value={contextValue}>
+    <NotificationProvider>
+      <ThemeContext.Provider value={themeContextValue}>
+        <UserContext.Provider value={userContextValue}>
           <div
             className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
           >
@@ -329,9 +303,9 @@ const App: React.FC = () => {
             </div>
             <NotificationSystem />
           </div>
-        </NotificationContext.Provider>
-      </UserContext.Provider>
-    </ThemeContext.Provider>
+        </UserContext.Provider>
+      </ThemeContext.Provider>
+    </NotificationProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
 export interface Notification {
   id: number;
@@ -15,14 +15,3 @@ export interface NotificationContextType {
 export const NotificationContext = createContext<
   NotificationContextType | undefined
 >(undefined);
-
-// 커스텀 훅: useAppContext
-export const useNotificationContext = () => {
-  const context = useContext(NotificationContext);
-  if (context === undefined) {
-    throw new Error(
-      "useNotificationContext must be used within an NotificationProvider",
-    );
-  }
-  return context;
-};
