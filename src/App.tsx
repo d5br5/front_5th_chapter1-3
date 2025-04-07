@@ -1,5 +1,11 @@
 import React, { useState, createContext, useContext } from "react";
 import { generateItems, renderLog } from "./utils";
+import {
+  User,
+  UserContext,
+  UserContextType,
+  useUserContext,
+} from "./context/user";
 
 // 타입 정의
 interface Item {
@@ -7,12 +13,6 @@ interface Item {
   name: string;
   category: string;
   price: number;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
 }
 
 interface Notification {
@@ -25,9 +25,7 @@ interface Notification {
 interface AppContextType {
   theme: string;
   toggleTheme: () => void;
-  user: User | null;
-  login: (email: string, password: string) => void;
-  logout: () => void;
+
   notifications: Notification[];
   addNotification: (message: string, type: Notification["type"]) => void;
   removeNotification: (id: number) => void;
@@ -47,7 +45,8 @@ const useAppContext = () => {
 // Header 컴포넌트
 export const Header: React.FC = () => {
   renderLog("Header rendered");
-  const { theme, toggleTheme, user, login, logout } = useAppContext();
+  const { theme, toggleTheme } = useAppContext();
+  const { user, login, logout } = useUserContext();
 
   const handleLogin = () => {
     // 실제 애플리케이션에서는 사용자 입력을 받아야 합니다.
@@ -312,33 +311,38 @@ const App: React.FC = () => {
   const contextValue: AppContextType = {
     theme,
     toggleTheme,
-    user,
-    login,
-    logout,
     notifications,
     addNotification,
     removeNotification,
   };
 
+  const userContextValue: UserContextType = {
+    user,
+    login,
+    logout,
+  };
+
   return (
-    <AppContext.Provider value={contextValue}>
-      <div
-        className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
-      >
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 md:pr-4">
-              <ItemList items={items} onAddItemsClick={addItems} />
-            </div>
-            <div className="w-full md:w-1/2 md:pl-4">
-              <ComplexForm />
+    <UserContext.Provider value={userContextValue}>
+      <AppContext.Provider value={contextValue}>
+        <div
+          className={`min-h-screen ${theme === "light" ? "bg-gray-100" : "bg-gray-900 text-white"}`}
+        >
+          <Header />
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 md:pr-4">
+                <ItemList items={items} onAddItemsClick={addItems} />
+              </div>
+              <div className="w-full md:w-1/2 md:pl-4">
+                <ComplexForm />
+              </div>
             </div>
           </div>
+          <NotificationSystem />
         </div>
-        <NotificationSystem />
-      </div>
-    </AppContext.Provider>
+      </AppContext.Provider>
+    </UserContext.Provider>
   );
 };
 
