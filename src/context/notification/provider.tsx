@@ -18,16 +18,16 @@ export const NotificationProvider = ({
       };
       setNotifications((prev) => [...prev, newNotification]);
     },
-    [setNotifications]
+    [setNotifications],
   );
 
   const removeNotification = useCallback(
     (id: number) => {
       setNotifications((prev) =>
-        prev.filter((notification) => notification.id !== id)
+        prev.filter((notification) => notification.id !== id),
       );
     },
-    [setNotifications]
+    [setNotifications],
   );
 
   const contextValue: NotificationContextType = useMemo(
@@ -36,7 +36,7 @@ export const NotificationProvider = ({
       addNotification,
       removeNotification,
     }),
-    [notifications, addNotification, removeNotification]
+    [notifications, addNotification, removeNotification],
   );
 
   return (

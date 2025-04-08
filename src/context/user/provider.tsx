@@ -12,7 +12,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUser({ id: 1, name: "홍길동", email });
       addNotification("성공적으로 로그인되었습니다", "success");
     },
-    [addNotification]
+    [addNotification],
   );
 
   const logout = useCallback(() => {
@@ -22,7 +22,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const contextValue = useMemo(
     () => ({ user, login, logout }),
-    [user, login, logout]
+    [user, login, logout],
   );
 
   return (
