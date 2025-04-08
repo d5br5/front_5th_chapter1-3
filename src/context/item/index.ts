@@ -1,11 +1,5 @@
 import { createContext, useContext } from "react";
-
-export interface Item {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-}
+import { Item } from "../../utils/types";
 
 export interface ItemContextType {
   items: Item[];

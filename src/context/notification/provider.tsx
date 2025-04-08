@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Notification, NotificationContext, NotificationContextType } from ".";
+import { NotificationContext, NotificationContextType } from ".";
 import { useCallback, useMemo } from "../../@lib";
+import { Notification } from "../../utils/types";
 
-export const NotificationProvider = ({
+export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
-}: {
-  children: React.ReactNode;
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 

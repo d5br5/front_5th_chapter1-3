@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { User, UserContext } from ".";
+import { UserContext } from ".";
 import { useCallback, useMemo } from "../../@lib";
-import { useNotificationContext } from "../notification/hook";
+import { User } from "../../utils/types";
+import { useNotificationContext } from "../notification";
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const { addNotification } = useNotificationContext();
 
