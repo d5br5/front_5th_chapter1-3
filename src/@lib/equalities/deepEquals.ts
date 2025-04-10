@@ -1,5 +1,4 @@
-const isObj = (obj: unknown): obj is Record<string, unknown> =>
-  typeof obj === "object" && obj !== null;
+import { isObj } from "../../utils/equal";
 
 export function deepEquals<T>(objA: T, objB: T): boolean {
   if (objA === objB) return true;

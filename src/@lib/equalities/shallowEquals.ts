@@ -1,6 +1,4 @@
-const isObj = (obj: unknown): obj is Record<string, unknown> => {
-  return obj !== null && typeof obj === "object";
-};
+import { isObj } from "../../utils/equal";
 
 export function shallowEquals<T>(objA: T, objB: T): boolean {
   // 원시타입 비교 (둘 다 원시타입이면 여기서 걸러짐)
